@@ -48,13 +48,13 @@ typedef enum { CMAP_RED = 0, CMAP_BLACK } color_t;
     do {                                            \
         (r)->color = rb_color(r) | (uintptr_t) (p); \
     } while (0)
-#define rb_set_red(r) \
-    do {              \
-        (r)->color &= ~1;         \
+#define rb_set_red(r)     \
+    do {                  \
+        (r)->color &= ~1; \
     } while (0)
-#define rb_set_black(r) \
-    do {                \
-        (r)->color |= 1;           \
+#define rb_set_black(r)  \
+    do {                 \
+        (r)->color |= 1; \
     } while (0)
 
 #define rb_is_red(r) (!rb_color(r))

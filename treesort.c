@@ -131,7 +131,7 @@ static node_t *cmap_create_node(node_t *node)
  *
  * Returns the new node pointing in the spot of the original node.
  */
-static node_t *cmap_rotate_left(cmap_t obj, node_t *node)
+static inline node_t *cmap_rotate_left(cmap_t obj, node_t *node)
 {
     node_t *r = node->right, *rl = r->left, *up = rb_parent(node);
 
@@ -168,7 +168,7 @@ static node_t *cmap_rotate_left(cmap_t obj, node_t *node)
  *
  * Return the new node pointing in the spot of the original node.
  */
-static node_t *cmap_rotate_right(cmap_t obj, node_t *node)
+static inline node_t *cmap_rotate_right(cmap_t obj, node_t *node)
 {
     node_t *l = node->left, *lr = l->right, *up = rb_parent(node);
 
@@ -194,11 +194,11 @@ static node_t *cmap_rotate_right(cmap_t obj, node_t *node)
     return l;
 }
 
-static void cmap_l_l(cmap_t obj,
-                     node_t *node UNUSED,
-                     node_t *parent UNUSED,
-                     node_t *grandparent,
-                     node_t *uncle UNUSED)
+static inline void cmap_l_l(cmap_t obj,
+                            node_t *node UNUSED,
+                            node_t *parent UNUSED,
+                            node_t *grandparent,
+                            node_t *uncle UNUSED)
 {
     /* Rotate to the right according to grandparent */
     grandparent = cmap_rotate_right(obj, grandparent);
@@ -217,11 +217,11 @@ static void cmap_l_l(cmap_t obj,
         rb_set_black(grandparent);
 }
 
-static void cmap_l_r(cmap_t obj,
-                     node_t *node,
-                     node_t *parent,
-                     node_t *grandparent,
-                     node_t *uncle)
+static inline void cmap_l_r(cmap_t obj,
+                            node_t *node,
+                            node_t *parent,
+                            node_t *grandparent,
+                            node_t *uncle)
 {
     /* Rotate to the left according to parent */
     parent = cmap_rotate_left(obj, parent);
@@ -236,11 +236,11 @@ static void cmap_l_r(cmap_t obj,
     cmap_l_l(obj, node, parent, grandparent, uncle);
 }
 
-static void cmap_r_r(cmap_t obj,
-                     node_t *node UNUSED,
-                     node_t *parent UNUSED,
-                     node_t *grandparent,
-                     node_t *uncle UNUSED)
+static inline void cmap_r_r(cmap_t obj,
+                            node_t *node UNUSED,
+                            node_t *parent UNUSED,
+                            node_t *grandparent,
+                            node_t *uncle UNUSED)
 {
     /* Rotate to the left according to grandparent */
     grandparent = cmap_rotate_left(obj, grandparent);
@@ -259,11 +259,11 @@ static void cmap_r_r(cmap_t obj,
         rb_set_black(grandparent);
 }
 
-static void cmap_r_l(cmap_t obj,
-                     node_t *node,
-                     node_t *parent,
-                     node_t *grandparent,
-                     node_t *uncle)
+static inline void cmap_r_l(cmap_t obj,
+                            node_t *node,
+                            node_t *parent,
+                            node_t *grandparent,
+                            node_t *uncle)
 {
     /* Rotate to the right according to parent */
     parent = cmap_rotate_right(obj, parent);
@@ -278,7 +278,7 @@ static void cmap_r_l(cmap_t obj,
     cmap_r_r(obj, node, parent, grandparent, uncle);
 }
 
-static void cmap_fix_colors(cmap_t obj, node_t *node)
+static inline void cmap_fix_colors(cmap_t obj, node_t *node)
 {
     /* If root, set the color to black */
     if (node == obj->head) {
@@ -329,7 +329,7 @@ static void cmap_fix_colors(cmap_t obj, node_t *node)
  * tree. This is so iterators know where the beginning and end of the tree
  * resides.
  */
-static void cmap_calibrate(cmap_t obj)
+static inline void cmap_calibrate(cmap_t obj)
 {
     if (!obj->head) {
         obj->it_least.node = obj->it_most.node = NULL;

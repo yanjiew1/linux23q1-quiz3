@@ -41,7 +41,7 @@ struct cmap_internal {
 
 typedef enum { CMAP_RED = 0, CMAP_BLACK } color_t;
 
-#define rb_parent(r) ((node_t *) (AAAA))
+#define rb_parent(r) ((node_t *) ((r)->color & ~1))
 #define rb_color(r) ((color_t) (r)->color & 1)
 
 #define rb_set_parent(r, p)                         \
@@ -50,11 +50,11 @@ typedef enum { CMAP_RED = 0, CMAP_BLACK } color_t;
     } while (0)
 #define rb_set_red(r) \
     do {              \
-        BBBB;         \
+        (r)->color &= ~1;         \
     } while (0)
 #define rb_set_black(r) \
     do {                \
-        CCCC;           \
+        (r)->color |= 1;           \
     } while (0)
 
 #define rb_is_red(r) (!rb_color(r))
@@ -407,7 +407,7 @@ static bool cmap_insert(cmap_t obj, node_t *node, void *value)
                 cmap_fix_colors(obj, node);
                 break;
             }
-            DDDD;
+            cur = cur->left;
         } else {
             if (!cur->right) {
                 cur->right = node;
@@ -415,7 +415,7 @@ static bool cmap_insert(cmap_t obj, node_t *node, void *value)
                 cmap_fix_colors(obj, node);
                 break;
             }
-            EEEE;
+            cur = cur->right;
         }
     }
 
@@ -468,14 +468,14 @@ void tree_sort(node_t **list)
     cmap_t map = cmap_new(sizeof(long), sizeof(NULL), cmap_cmp_int);
     while (*list) {
         cmap_insert(map, *list, NULL);
-        list = FFFF;
+        list = &(*list)->next;
     }
     node_t *node = cmap_first(map), *first = node;
     for (; node; node = cmap_next(node)) {
         *list = node;
-        list = GGGG;
+        list = &node->next;
     }
-    HHHH;
+    *list = NULL;
     *record = first;
     free(map);
 }
